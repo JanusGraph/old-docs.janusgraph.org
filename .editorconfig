@@ -1,0 +1,14 @@
+# http://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+
+[*.html]
+indent_style = space
+indent_size = 2
+
+[*.md]
+indent_style = space
+indent_size = 2
