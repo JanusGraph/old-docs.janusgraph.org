@@ -1,0 +1,63 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;17.&nbsp;Google Cloud Bigtable</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="JanusGraph Documentation"><link rel="up" href="storage-backends.html" title="Part&nbsp;III.&nbsp;Storage Backends"><link rel="prev" href="hbase.html" title="Chapter&nbsp;16.&nbsp;HBase"><link rel="next" href="bdb.html" title="Chapter&nbsp;18.&nbsp;BerkeleyDB"><script xmlns:d="http://docbook.org/ns/docbook" type="text/javascript" src="js/jquery/jquery-1.11.0.js"></script><script xmlns:d="http://docbook.org/ns/docbook" type="text/javascript" src="js/jquery/jquery-migrate-1.2.1.min.js"></script><link xmlns:d="http://docbook.org/ns/docbook" rel="stylesheet" id="style-css-css" href="avada-stub/style.css" type="text/css" media="all"><link xmlns:d="http://docbook.org/ns/docbook" rel="stylesheet" id="media-css-css" href="avada-stub/css/media.css" type="text/css" media="all"><link xmlns:d="http://docbook.org/ns/docbook" rel="stylesheet" id="animate-css-css" href="avada-stub/css/animate-custom.css" type="text/css" media="all"><link xmlns:d="http://docbook.org/ns/docbook" rel="stylesheet" id="inline-blob-from-avada-prototype" href="avada-stub/css/inlineblob.css" type="text/css" media="all"><link xmlns:d="http://docbook.org/ns/docbook" rel="stylesheet" id="inline-blob-from-avada-prototype-janusgraph-docs-specific" href="css/docs.css" type="text/css" media="all"><script xmlns:d="http://docbook.org/ns/docbook" type="text/javascript">
+      WebFontConfig = {
+        google: {
+          families: [
+            "Lato:400,400italic,700,700italic:latin,greek-ext,cyrillic,latin-ext,greek,cyrillic-ext,vietnamese",
+            "Open+Sans:400,400italic,700,700italic:latin,greek-ext,cyrillic,latin-ext,greek,cyrillic-ext,vietnamese",
+            "Antic+Slab:400,400italic,700,700italic:latin,greek-ext,cyrillic,latin-ext,greek,cyrillic-ext,vietnamese"
+          ]
+        },
+        custom: {
+           families: ['FontAwesome'],
+           urls: ['font-awesome-4.0.3/css/font-awesome.css']
+        }
+      };
+      (function() {
+      var wf = document.createElement('script');
+      wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+        '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+	wf.type = 'text/javascript';
+	wf.async = 'true';
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(wf, s);
+	})();
+    </script></head><body xmlns:d="http://docbook.org/ns/docbook" bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="wrapper"><div class="header-wrapper"><div class="header-v1"><header id="header"><div class="avada-row" style="margin-top:0px;margin-bottom:0px;"><div class="logo" style="margin-right:0px;margin-top:31px;margin-left:0px;margin-bottom:31px;"><a href="http://janusgraph.org"><img src="avada-stub/images/janusgraph-logo.png" alt="JanusGraph" class="normal_logo"></a></div><nav id="nav" class="nav-holder"><ul class="navigation menu fusion-navbar-nav"><li id="menu-item-4711" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-4711"><a href="index.html">Documentation (0.1.1)</a></li><li id="menu-item-4712" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-4712"><a href="https://github.com/JanusGraph/janusgraph/releases">Other Versions</a></li><li id="menu-item-4710" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-4710"><a href="https://github.com/JanusGraph/janusgraph/releases">Download JanusGraph</a></li></ul></nav><div class="mobile-nav-holder main-menu"></div></div></header></div><div class="init-sticky-header"></div></div><header id="header-sticky" class="sticky-header"><div class="sticky-shadow"><div class="avada-row"><div class="logo"><a href="http://janusgraph.org"><img src="avada-stub/images/janusgraph-logo.png" alt="JanusGraph" data-max-width="" class="normal_logo"></a></div><nav id="sticky-nav" class="nav-holder"><ul class="navigation menu fusion-navbar-nav"><li id="menu-item-4711" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-4711"><a href="index.html">Documentation (0.1.1)</a></li><li id="menu-item-4712" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-4712"><a href="https://github.com/JanusGraph/janusgraph/releases">Other Versions</a></li><li id="menu-item-4710" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-4710"><a href="https://github.com/JanusGraph/janusgraph/releases">Download JanusGraph</a></li></ul></nav><div class="mobile-nav-holder"></div></div></div></header><div id="main" class="clearfix width-100"><div class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">JanusGraph Documentation</a></span> &gt; <span class="breadcrumb-link"><a href="storage-backends.html">Storage Backends</a></span> &gt; <span class="breadcrumb-node">Google Cloud Bigtable</span></div><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="bigtable"></a>Chapter&nbsp;17.&nbsp;Google Cloud Bigtable</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="section"><a href="bigtable.html#_bigtable_setup">17.1. Bigtable Setup</a></span></dt><dd><dl><dt><span class="section"><a href="bigtable.html#_dependencies">17.1.1. Dependencies</a></span></dt><dt><span class="section"><a href="bigtable.html#_connecting_to_bigtable">17.1.2. Connecting to Bigtable</a></span></dt></dl></dd></dl></div><p class="tss-center tss-width-250"><span class="inlinemediaobject"><img src="images/Cloud-Bigtable.svg" alt="Cloud-Bigtable"></span></p><div class="blockquote"><table border="0" class="blockquote" style="width: 100%; cellspacing: 0; cellpadding: 0;" summary="Block quote"><tr><td width="10%" valign="top">&nbsp;</td><td width="80%" valign="top"><p>Cloud Bigtable is Google&#8217;s NoSQL Big Data database service. It&#8217;s the same database that powers many core Google
+services, including Search, Analytics, Maps, and Gmail.</p><p>Bigtable is designed to handle massive workloads at consistent low latency and high throughput, so it&#8217;s a great choice
+for both operational and analytical applications, including IoT, user analytics, and financial data analysis.</p></td><td width="10%" valign="top">&nbsp;</td></tr><tr><td width="10%" valign="top">&nbsp;</td><td colspan="2" align="right" valign="top">--<span class="attribution">
+    
+    <a class="link" href="https://cloud.google.com/bigtable/" target="_top">Google Cloud Bigtable Homepage</a>
+    
+    
+  </span></td></tr></table></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_bigtable_setup"></a>17.1.&nbsp;Bigtable Setup</h2></div></div></div><p>Bigtable implements the HBase interface for all data access operations, and requires some extra binary dependencies and
+some specific configuration options to connect.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="_dependencies"></a>17.1.1.&nbsp;Dependencies</h3></div></div></div><p>Bigtable connectivity relies on the <code class="literal">cloud-bigtable-client</code> library. This library is open-source and is
+<a class="link" href="https://github.com/GoogleCloudPlatform/cloud-bigtable-client" target="_top">hosted on GitHub</a>. JanusGraph uses the HBase 1.0 API,
+so we require the lastest version of the
+<a class="link" href="http://mvnrepository.com/artifact/com.google.cloud.bigtable/bigtable-hbase-1.0/0.9.5.1" target="_top">bigtable-hbase-1.0 artifact.</a></p><p>This library also uses the
+<a class="link" href="https://mvnrepository.com/artifact/io.netty/netty-tcnative-boringssl-static" target="_top">netty-tcnative-boringssl-static</a> library
+to make secure connections to Bigtable. Use the version recommended by the cloud-bigtable-client library.</p><p>These two dependencies must be on the classpath of the Java binary that connects to Bigtable. Maven dependencies could
+be defined as:</p><pre class="programlisting"><strong class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>com.google.cloud.bigtable<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>bigtable-hbase-1.0<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>0.9.5.1<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+
+<strong class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>io.netty<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>netty-tcnative-boringssl-static<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+   <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>1.1.33.Fork19<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre><p>It is recommended to check the documentation on the cloud-bigtable-client github homepage for updated documentation on
+dependencies and version numbers.</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="_connecting_to_bigtable"></a>17.1.2.&nbsp;Connecting to Bigtable</h3></div></div></div><p>Configuring JanusGraph to connect to Bigtable is achieved by using the <code class="literal">hbase</code> backend, along with a custom connection
+implementation, the project id of the Google Cloud Platform project containing the Bigtable instance, and the Cloud
+Bigtable instance id you are connecting to.</p><p>Example:</p><pre class="programlisting">storage.backend=hbase
+storage.hbase.ext.hbase.client.connection.impl=com.google.cloud.bigtable.hbase1_0.BigtableConnection
+storage.hbase.ext.google.bigtable.project.id=&lt;Google Cloud Platform project id&gt;
+storage.hbase.ext.google.bigtable.instance.id=&lt;Bigtable instance id&gt;</pre></div></div></div></div><div class="clearer"></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="hbase.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="storage-backends.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="bdb.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;16.&nbsp;HBase&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;18.&nbsp;BerkeleyDB</td></tr></table></div><footer id="footer"><div class="avada-row"><ul class="copyright"><li>
+              Copyright &copy; 2017 JanusGraph Authors. All rights reserved.<br>
+              The Linux Foundation has registered trademarks and uses trademarks. For a list of<br>
+              trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page.<br>
+              Cassandra, HBase, and Hadoop are trademarks of the Apache Software Foundation.<br>
+              Berkeley DB and Berkeley DB Java Edition are trademarks of Oracle.<br>
+              Documentation generated with <a href="http://www.methods.co.nz/asciidoc/">AsciiDoc</a>, <a href="http://asciidoctor.org/">AsciiDoctor</a>, <a href="http://docbook.sourceforge.net/">DocBook</a>, and <a href="http://saxon.sourceforge.net/">Saxon</a>.
+              </li></ul></div></footer></div><script type="text/javascript" src="avada-stub/js/main.js"></script></body></html>
