@@ -24,16 +24,10 @@ JanusGraph release.</p><div class="section"><div class="titlepage"><div><div><h2
 <a class="link" href="https://github.com/thinkaurelius/titan" target="_top">Titan repo</a>.</p><p>JanusGraph has made the following changes to Titan, so you will need to adjust
 your code and configuration accordingly:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">module names: <code class="literal">titan-*</code> are now <code class="literal">janusgraph-*</code></li><li class="listitem">package names: <code class="literal">com.thinkaurelius.titan</code> are now <code class="literal">org.janusgraph</code></li><li class="listitem">class names: <code class="literal">Titan*</code> are now <code class="literal">JanusGraph*</code> except in cases where this would
 duplicate a word, e.g., <code class="literal">TitanGraph</code> is simply <code class="literal">JanusGraph</code> rather than
-<code class="literal">JanusGraphGraph</code></li></ol></div><p><span class="strong"><strong>IMPORTANT</strong></span> If you are pointing JanusGraph at an existing Titan database you will need to
-set the <code class="literal">ids.store-name</code> property to <code class="literal">titan_ids</code> in your JanusGraph properties file.
-Failure to do this could result in id allocation issues.
-See <a class="link" href="https://github.com/JanusGraph/janusgraph/issues/228" target="_top">228</a> for more details.</p><p>The BerkeleyDB version has been updated, and it contains changes to the file
-format stored on disk. This file format change is forward compatible with
-previous versions of BerkeleyDB, so existing graph data stored with Titan
-can be read in. However, once the data has been read in with the newer version
-of BerkeleyDB, those files can no longer be read by the older version. Users
-are encouraged to backup the BerkeleyDB storage directory before attempting to
-use it with the JanusGraph release.</p></div></div></div><div class="clearer"></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="changelog.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="appendices.html">Up</a></td><td width="40%" align="right">&nbsp;</td></tr><tr><td width="40%" align="left" valign="top">Appendix&nbsp;C.&nbsp;Release Notes&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;</td></tr></table></div><div class="footer-wrapper"><footer id="footer"><div class="copyright">
+<code class="literal">JanusGraphGraph</code></li></ol></div><p><span class="strong"><strong>IMPORTANT</strong></span> If you are pointing JanusGraph at an existing Titan database you will
+need to set the <code class="literal">graph.titan-version</code> property. For more information on how to
+configure JanusGraph to read data which had previously been written by Titan
+refer to <a class="xref" href="migrating-titan.html" title="Chapter&nbsp;37.&nbsp;Migrating from Titan">Chapter&nbsp;37, <i>Migrating from Titan</i></a>.</p></div></div></div><div class="clearer"></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="changelog.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="appendices.html">Up</a></td><td width="40%" align="right">&nbsp;</td></tr><tr><td width="40%" align="left" valign="top">Appendix&nbsp;C.&nbsp;Release Notes&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;</td></tr></table></div><div class="footer-wrapper"><footer id="footer"><div class="copyright">
               Copyright &copy; 2017 JanusGraph Authors. All rights reserved.<br>
               The Linux Foundation has registered trademarks and uses trademarks. For a list of<br>
               trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page.<br>
