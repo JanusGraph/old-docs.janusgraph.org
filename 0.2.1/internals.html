@@ -1,0 +1,29 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Part&nbsp;VI.&nbsp;JanusGraph Internals</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="JanusGraph Documentation"><link rel="up" href="index.html" title="JanusGraph Documentation"><link rel="prev" href="migrating-titan.html" title="Chapter&nbsp;37.&nbsp;Migrating from Titan"><link rel="next" href="data-model.html" title="Chapter&nbsp;38.&nbsp;JanusGraph Data Model"><script xmlns:d="http://docbook.org/ns/docbook" type="text/javascript" src="js/jquery/jquery-1.11.0.js"></script><script xmlns:d="http://docbook.org/ns/docbook" type="text/javascript" src="js/jquery/jquery-migrate-1.2.1.min.js"></script><link xmlns:d="http://docbook.org/ns/docbook" rel="stylesheet" id="inline-blob-janusgraph-docs-specific" href="css/docs.css" type="text/css" media="all"><link xmlns:d="http://docbook.org/ns/docbook" rel="apple-touch-icon" type="image/png" href="images/janusgraph-logomark.png"><script xmlns:d="http://docbook.org/ns/docbook" type="text/javascript">
+      WebFontConfig = {
+        google: {
+          families: [
+            "Lato:400,400italic,700,700italic:latin,greek-ext,cyrillic,latin-ext,greek,cyrillic-ext,vietnamese",
+            "Open+Sans:400,400italic,700,700italic:latin,greek-ext,cyrillic,latin-ext,greek,cyrillic-ext,vietnamese",
+            "Antic+Slab:400,400italic,700,700italic:latin,greek-ext,cyrillic,latin-ext,greek,cyrillic-ext,vietnamese"
+          ]
+        }
+      };
+      (function() {
+      var wf = document.createElement('script');
+      wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+        '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+	wf.type = 'text/javascript';
+	wf.async = 'true';
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(wf, s);
+	})();
+    </script></head><body xmlns:d="http://docbook.org/ns/docbook" bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="wrapper"><div class="header-wrapper"><header id="header"><ul class="header-list"><li class="header-item"><a href="http://janusgraph.org"><img src="images/janusgraph-logo.png" alt="JanusGraph" class="normal_logo"></a></li><li class="header-item-right"><a href="https://github.com/JanusGraph/janusgraph/releases">Download JanusGraph</a></li><li class="header-item-right"><a href="https://github.com/JanusGraph/janusgraph/releases">Other Versions</a></li><li class="header-item-right"><a href="index.html">Documentation (0.2.1)</a></li></ul></header></div><div id="main" class="clearfix width-100"><div class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">JanusGraph Documentation</a></span> &gt; <span class="breadcrumb-node">JanusGraph Internals</span></div><div class="part"><div class="titlepage"><div><div><h1 class="title"><a name="internals"></a>Part&nbsp;VI.&nbsp;JanusGraph Internals</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="chapter"><a href="data-model.html">38. JanusGraph Data Model</a></span></dt><dd><dl><dt><span class="section"><a href="data-model.html#_bigtable_data_model">38.1. Bigtable Data Model</a></span></dt><dt><span class="section"><a href="data-model.html#_janusgraph_data_layout">38.2. JanusGraph Data Layout</a></span></dt><dt><span class="section"><a href="data-model.html#_individual_edge_layout">38.3. Individual Edge Layout</a></span></dt></dl></dd><dt><span class="chapter"><a href="building.html">39. Building JanusGraph</a></span></dt><dd><dl><dt><span class="section"><a href="building.html#_depending_on_janusgraph_snapshots">39.1. Depending on JanusGraph Snapshots</a></span></dt><dt><span class="section"><a href="building.html#_faqs">39.2. FAQs</a></span></dt></dl></dd></dl></div></div></div><div class="clearer"></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="migrating-titan.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="data-model.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;37.&nbsp;Migrating from Titan&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;38.&nbsp;JanusGraph Data Model</td></tr></table></div><div class="footer-wrapper"><footer id="footer"><div class="copyright">
+              Copyright &copy; 2017 JanusGraph Authors. All rights reserved.<br>
+              The Linux Foundation has registered trademarks and uses trademarks. For a list of<br>
+              trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page.<br>
+              Cassandra, Groovy, HBase, Hadoop, Lucene, Solr, and TinkerPop are trademarks of the Apache Software Foundation.<br>
+              Berkeley DB and Berkeley DB Java Edition are trademarks of Oracle.<br>
+              Documentation generated with <a href="http://www.methods.co.nz/asciidoc/">AsciiDoc</a>, <a href="http://asciidoctor.org/">AsciiDoctor</a>, <a href="http://docbook.sourceforge.net/">DocBook</a>, and <a href="http://saxon.sourceforge.net/">Saxon</a>.
+        	  </div></footer></div></div></body></html>
