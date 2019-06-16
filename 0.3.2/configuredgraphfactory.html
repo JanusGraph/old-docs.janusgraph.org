@@ -1,0 +1,447 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;9.&nbsp;ConfiguredGraphFactory</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="JanusGraph Documentation"><link rel="up" href="basics.html" title="Part&nbsp;II.&nbsp;JanusGraph Basics"><link rel="prev" href="deployment-scenarios.html" title="Chapter&nbsp;8.&nbsp;Deployment Scenarios"><link rel="next" href="things-to-consider-in-a-multi-node-janusgraph-cluster.html" title="Chapter&nbsp;10.&nbsp;Things to Consider in a Multi-Node JanusGraph Cluster"><script xmlns:d="https://docbook.org/ns/docbook" type="text/javascript" src="js/jquery/jquery-1.11.0.js"></script><script xmlns:d="https://docbook.org/ns/docbook" type="text/javascript" src="js/jquery/jquery-migrate-1.2.1.min.js"></script><link xmlns:d="https://docbook.org/ns/docbook" rel="stylesheet" id="inline-blob-janusgraph-docs-specific" href="css/docs.css" type="text/css" media="all"><link xmlns:d="https://docbook.org/ns/docbook" rel="apple-touch-icon" type="image/png" href="images/janusgraph-logomark.png"><script xmlns:d="https://docbook.org/ns/docbook" type="text/javascript">
+      WebFontConfig = {
+        google: {
+          families: [
+            "Lato:400,400italic,700,700italic:latin,greek-ext,cyrillic,latin-ext,greek,cyrillic-ext,vietnamese",
+            "Open+Sans:400,400italic,700,700italic:latin,greek-ext,cyrillic,latin-ext,greek,cyrillic-ext,vietnamese",
+            "Antic+Slab:400,400italic,700,700italic:latin,greek-ext,cyrillic,latin-ext,greek,cyrillic-ext,vietnamese"
+          ]
+        }
+      };
+      (function() {
+      var wf = document.createElement('script');
+      wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+        '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+	wf.type = 'text/javascript';
+	wf.async = 'true';
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(wf, s);
+	})();
+    </script></head><body xmlns:d="https://docbook.org/ns/docbook" bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="wrapper"><div class="header-wrapper"><header id="header"><ul class="header-list"><li class="header-item"><a href="https://janusgraph.org"><img src="images/janusgraph-logo.png" alt="JanusGraph" class="normal_logo"></a></li><li class="header-item-right"><a href="https://github.com/JanusGraph/janusgraph/releases">Download JanusGraph</a></li><li class="header-item-right dropdown"><a href="https://docs.janusgraph.org/latest/doc-versions.html">Other Doc Versions</a><div class="dropdown-content"><a href="https://docs.janusgraph.org/latest/index.html">Latest</a><a href="https://docs.janusgraph.org/0.3.2/index.html">Version 0.3.2</a><a href="https://docs.janusgraph.org/0.3.1/index.html">Version 0.3.1</a><a href="https://docs.janusgraph.org/0.3.0/index.html">Version 0.3.0</a><a href="https://docs.janusgraph.org/0.2.3/index.html">Version 0.2.3</a><a href="https://docs.janusgraph.org/0.2.2/index.html">Version 0.2.2</a><a href="https://docs.janusgraph.org/0.2.1/index.html">Version 0.2.1</a><a href="https://docs.janusgraph.org/0.2.0/index.html">Version 0.2.0</a><a href="https://docs.janusgraph.org/0.1.1/index.html">Version 0.1.1</a><a href="https://docs.janusgraph.org/0.1.0/index.html">Version 0.1.0</a></div></li><li class="header-item-right"><a href="index.html">Documentation (0.3.2)</a></li></ul></header></div><div id="main" class="clearfix width-100"><div class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">JanusGraph Documentation</a></span> &gt; <span class="breadcrumb-link"><a href="basics.html">JanusGraph Basics</a></span> &gt; <span class="breadcrumb-node">ConfiguredGraphFactory</span></div><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="configuredgraphfactory"></a>Chapter&nbsp;9.&nbsp;ConfiguredGraphFactory</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="section"><a href="configuredgraphfactory.html#overview">9.1. Overview</a></span></dt><dt><span class="section"><a href="configuredgraphfactory.html#configuredgraphfactory-versus-JanusGraphfactory">9.2. ConfiguredGraphFactory versus JanusGraphFactory</a></span></dt><dt><span class="section"><a href="configuredgraphfactory.html#how-does-the-configuredgraphfactory-work">9.3. How Does the ConfiguredGraphFactory Work?</a></span></dt><dt><span class="section"><a href="configuredgraphfactory.html#accessing-the-graphs">9.4. Accessing the Graphs</a></span></dt><dt><span class="section"><a href="configuredgraphfactory.html#listing-the-graphs">9.5. Listing the Graphs</a></span></dt><dt><span class="section"><a href="configuredgraphfactory.html#dropping-a-graph">9.6. Dropping a Graph</a></span></dt><dt><span class="section"><a href="configuredgraphfactory.html#configuring-JanusGraph-server-for-configuredgraphfactory">9.7. Configuring JanusGraph Server for ConfiguredGraphFactory</a></span></dt><dt><span class="section"><a href="configuredgraphfactory.html#configurationmanagementgraph">9.8. ConfigurationManagementGraph</a></span></dt><dd><dl><dt><span class="section"><a href="configuredgraphfactory.html#graph-configurations">9.8.1. Graph Configurations</a></span></dt><dt><span class="section"><a href="configuredgraphfactory.html#template-configuration">9.8.2. Template Configuration</a></span></dt><dt><span class="section"><a href="configuredgraphfactory.html#updating-configurations">9.8.3. Updating Configurations</a></span></dt><dt><span class="section"><a href="configuredgraphfactory.html#update-examples">9.8.4. Update Examples</a></span></dt></dl></dd><dt><span class="section"><a href="configuredgraphfactory.html#JanusGraphmanager">9.9. JanusGraphManager</a></span></dt><dd><dl><dt><span class="section"><a href="configuredgraphfactory.html#usingtheJanusGraphmanager">9.9.1. How To Use The JanusGraphManager</a></span></dt><dt><span class="section"><a href="configuredgraphfactory.html#important">9.9.2. Important</a></span></dt></dl></dd><dt><span class="section"><a href="configuredgraphfactory.html#graph-and-traversal-bindings">9.10. Graph and Traversal Bindings</a></span></dt><dd><dl><dt><span class="section"><a href="configuredgraphfactory.html#binding-example">9.10.1. Binding Example</a></span></dt></dl></dd><dt><span class="section"><a href="configuredgraphfactory.html#examples">9.11. Examples</a></span></dt></dl></div>
+
+<p>The JanusGraph Server can be configured to use the <code class="literal">ConfiguredGraphFactory</code>.
+The <code class="literal">ConfiguredGraphFactory</code> is an access point to your graphs, similar
+to the <code class="literal">JanusGraphFactory</code>. These graph factories provide methods for
+dynamically managing the graphs hosted on the server.</p>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="overview"></a>9.1.&nbsp;Overview</h2></div></div></div>
+
+<p><code class="literal">JanusGraphFactory</code> is a class that provides an access point to your
+graphs by providing a Configuration object each time you access the graph.</p>
+<p><code class="literal">ConfiguredGraphFactory</code> provides an access point to your graphs for which
+you have previously created configurations using the
+<code class="literal">ConfigurationManagementGraph</code>. It also offers an access point to manage
+graph configurations.</p>
+<p><code class="literal">ConfigurationManagementGraph</code> allows you to manage graph configurations.</p>
+<p><code class="literal">JanusGraphManager</code> is an internal server component that tracks
+graph references, provided your graphs are configured to use it.</p>
+</div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configuredgraphfactory-versus-JanusGraphfactory"></a>9.2.&nbsp;ConfiguredGraphFactory versus JanusGraphFactory</h2></div></div></div>
+
+<p>However, there is an important distinction between these two graph
+factories:</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+The <code class="literal">ConfiguredGraphFactory</code> can only be used if you have configured
+your server to use the <code class="literal">ConfigurationManagementGraph</code> APIs at server
+start.
+</li></ol></div>
+
+<p>The benefits of using the <code class="literal">ConfiguredGraphFactory</code> are that:</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+You only need to supply a <code class="literal">String</code> to access your graphs, as opposed
+to the <code class="literal">JanusGraphFactory</code>-- which requires you to specify information
+about the backend you wish to use when accessing a graph-- every time
+you open a graph.
+</li><li class="listitem">
+If your ConfigurationManagementGraph is configured with a distributed
+storage backend then your graph configurations are available to all
+JanusGraph nodes in your cluster.
+</li></ol></div>
+
+</div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="how-does-the-configuredgraphfactory-work"></a>9.3.&nbsp;How Does the ConfiguredGraphFactory Work?</h2></div></div></div>
+
+<p>The <code class="literal">ConfiguredGraphFactory</code> provides an access point to graphs under
+two scenarios:</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+You have already created a configuration for your specific graph
+object using the <code class="literal">ConfigurationManagementGraph#createConfiguration</code>. In
+this scenario, your graph is opened using the previously created
+configuration for this graph.
+</li><li class="listitem">
+You have already created a template configuration using the
+<code class="literal">ConfigurationManagementGraph#createTemplateConfiguration</code>. In this
+scenario, we create a configuration for the graph you are creating by
+copying over all attributes stored in your template configuration and
+appending the relevant graphName attribute, and we then open the graph
+according to that specific configuration.
+</li></ol></div>
+
+</div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="accessing-the-graphs"></a>9.4.&nbsp;Accessing the Graphs</h2></div></div></div>
+
+<p>You can either use <code class="literal">ConfiguredGraphFactory.create("graphName")</code>
+or <code class="literal">ConfiguredGraphFactory.open("graphName")</code>. Learn more about the difference
+between these two options by reading the section below about the <code class="literal">ConfigurationManagementGraph</code>.</p>
+<p>You can also access your graphs by using the bindings. Read more about this in the <a class="xref" href="configuredgraphfactory.html#graph-and-traversal-bindings" title="9.10.&nbsp;Graph and Traversal Bindings">Section&nbsp;9.10, &#8220;Graph and Traversal Bindings&#8221;</a> section.</p>
+</div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="listing-the-graphs"></a>9.5.&nbsp;Listing the Graphs</h2></div></div></div>
+
+<p><code class="literal">ConfiguredGraphFactory.getGraphNames()</code> will return a set of graph names
+for which you have created configurations using the <code class="literal">ConfigurationManagementGraph</code> APIs.</p>
+<p><code class="literal">JanusGraphFactory.getGraphNames()</code> on the other hand returns a set of graph names
+for which you have instantiated <span class="emphasis"><em>and</em></span> the references are stored inside the <code class="literal">JanusGraphManager</code>.</p>
+</div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="dropping-a-graph"></a>9.6.&nbsp;Dropping a Graph</h2></div></div></div>
+
+<p><code class="literal">ConfiguredGraphFactory.drop("graphName")</code> will drop the graph database, deleting all data in storage and indexing backends. The graph can be open or closed (will be closed as part of the drop operation). Furthermore, this will also remove any existing graph configuration in the <code class="literal">ConfigurationManagementGraph</code>.</p>
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/icons/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top">
+<p>This is an irreversible operation that will delete all graph and index data.</p>
+</td></tr></table></div>
+
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/icons/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top">
+<p>To ensure all graph representations are consistent across all JanusGraph nodes in your cluster, this removes the graph from the <code class="literal">JanusGraphManager</code> graph cache on every node in the cluster, assuming each node has been properly configured to use the <code class="literal">JanusGraphManager</code>. Learn more about this feature and how to configure your server to use said feature <a class="link" href="things-to-consider-in-a-multi-node-janusgraph-cluster.html#graph-reference-consistency" title="10.1.1.&nbsp;Graph Reference Consistency">here</a>.</p>
+</td></tr></table></div>
+
+</div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configuring-JanusGraph-server-for-configuredgraphfactory"></a>9.7.&nbsp;Configuring JanusGraph Server for ConfiguredGraphFactory</h2></div></div></div>
+
+<p>To be able to use the <code class="literal">ConfiguredGraphFactory</code>, you must configure your
+server to use the <code class="literal">ConfigurationManagementGraph</code> APIs. To do this, you
+have to inject a graph variable named "ConfigurationManagementGraph" in your
+server&#8217;s YAML&#8217;s <code class="literal">graphs</code> map. For example:</p>
+<pre class="programlisting"><span class="hl-attribute">graphManager</span>: org.janusgraph.graphdb.management.JanusGraphManager
+<span class="hl-attribute">graphs</span>: {
+<span class="hl-attribute">  ConfigurationManagementGraph</span>: conf/JanusGraph-configurationmanagement.properties
+}</pre>
+
+<p>In this example, our <code class="literal">ConfigurationManagementGraph</code> graph will be
+configured using the properties stored inside
+<code class="literal">conf/JanusGraph-configurationmanagement.properties</code>, which for
+example, look like:</p>
+<pre class="programlisting"><span class="hl-attribute">gremlin.graph</span>=org.janusgraph.core.ConfiguredGraphFactory
+<span class="hl-attribute">storage.backend</span>=cql
+<span class="hl-attribute">graph.graphname</span>=ConfigurationManagementGraph
+<span class="hl-attribute">storage.hostname</span>=127.0.0.1</pre>
+
+<p>Assuming the GremlinServer started successfully and the
+<code class="literal">ConfigurationManagementGraph</code> was successfully instantiated, then all the
+APIs available on the <code class="literal">ConfigurationManagementGraph</code> <code class="literal">Singleton</code> will
+also act upon said graph. Furthermore, this is the graph that will be
+used to access the configurations used to create/open graphs using the
+<code class="literal">ConfiguredGraphFactory</code>.</p>
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/icons/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top">
+<p>The <code class="literal">pom.xml</code> included in the JanusGraph distribution lists this dependency as
+optional, but the <code class="literal">ConfiguredGraphFactory</code> makes use of the <code class="literal">JanusGraphManager</code>,
+which requires a declared dependency on the <code class="literal">org.apache.tinkerpop:gremlin-server</code>. So
+if you run into <code class="literal">NoClassDefFoundError</code> errors, then be sure to update according to this
+message.</p>
+</td></tr></table></div>
+
+</div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="configurationmanagementgraph"></a>9.8.&nbsp;ConfigurationManagementGraph</h2></div></div></div>
+
+<p>The <code class="literal">ConfigurationManagementGraph</code> is a <code class="literal">Singleton</code> that allows you to
+create/update/remove configurations that you can use to access your
+graphs using the <code class="literal">ConfiguredGraphFactory</code>. See above on configuring your
+server to enable use of these APIs.</p>
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/icons/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top">
+<p>The ConfiguredGraphFactory offers an access point to manage your
+graph configurations managed by the <code class="literal">ConfigurationManagementGraph</code>, so instead
+of acting upon the <code class="literal">Singleton</code> itself, you may act upon the corresponding
+<code class="literal">ConfiguredGraphFactory</code> static methods. For example, you may use
+<code class="literal">ConfiguredGraphFactory.removeTemplateConfiguration()</code> instead of
+<code class="literal">ConfiguredGraphFactory.getInstance().removeTemplateConfiguration()</code>.</p>
+</td></tr></table></div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="graph-configurations"></a>9.8.1.&nbsp;Graph Configurations</h3></div></div></div>
+
+<p>The <code class="literal">ConfigurationManagementGraph</code> singleton allows you to create
+configurations used to open specific graphs, referenced by the
+<code class="literal">graph.graphname</code> property. For example:</p>
+<pre class="programlisting"><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap&lt;String,<span class="hl-gremlin-func"> </span>Object&gt;<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.backend"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"cql"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"127.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"graph.graphname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>ConfiguredGraphFactory.createConfiguration<span class="hl-gremlin-func">(</span>new<span class="hl-gremlin-func"> </span>MapConfiguration<span class="hl-gremlin-func">(</span>map<span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">)</span>;</pre>
+
+<p>Then you could access this graph on any JanusGraph node using:</p>
+<pre class="programlisting">ConfiguredGraphFactory.open<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;</pre>
+
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="template-configuration"></a>9.8.2.&nbsp;Template Configuration</h3></div></div></div>
+
+<p>The <code class="literal">ConfigurationManagementGraph</code> also allows you to create one
+template configuration, which you can use to create many graphs using
+the same configuration template. For example:</p>
+<pre class="programlisting"><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap&lt;String,<span class="hl-gremlin-func"> </span>Object&gt;<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.backend"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"cql"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"127.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>ConfiguredGraphFactory.createTemplateConfiguration<span class="hl-gremlin-func">(</span>new<span class="hl-gremlin-func"> </span>MapConfiguration<span class="hl-gremlin-func">(</span>map<span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">)</span>;</pre>
+
+<p>After doing this, you can create graphs using the template
+configuration:</p>
+<pre class="programlisting">ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph2"</span><span class="hl-gremlin-func">)</span>;</pre>
+
+<p>This method will first create a new configuration for "graph2" by
+copying over all the properties associated with the template
+configuration and storing it on a configuration for this specific graph.
+This means that this graph can be accessed in, on any JanusGraph node,
+in the future by doing:</p>
+<pre class="programlisting">ConfiguredGraphFactory.open<span class="hl-gremlin-func">(</span><span class="hl-string">"graph2"</span><span class="hl-gremlin-func">)</span>;</pre>
+
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="updating-configurations"></a>9.8.3.&nbsp;Updating Configurations</h3></div></div></div>
+
+<p>All interactions with both the <code class="literal">JanusGraphFactory</code> and the
+<code class="literal">ConfiguredGraphFactory</code> that interact with configurations that define
+the property <code class="literal">graph.graphname</code> go through the <code class="literal">JanusGraphManager</code> which
+keeps track of graph references created on the given JVM. Think of it as
+a graph cache. For this reason:</p>
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/icons/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top">
+<p>Any updates to a graph configuration results in the eviction of the relevant graph from the graph cache on every node in the JanusGraph cluster, assuming each node has been configured properly to use the <code class="literal">JanusGraphManager</code>. Learn more about this feature and how to configure your server to use said feature <a class="link" href="things-to-consider-in-a-multi-node-janusgraph-cluster.html#graph-reference-consistency" title="10.1.1.&nbsp;Graph Reference Consistency">here</a>.</p>
+</td></tr></table></div>
+
+<p>Since graphs created using the template configuration first create a
+configuration for that graph in question using a copy and create method,
+this means that:</p>
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/icons/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top">
+<p>Any updates to a specific graph created using the template
+configuration are not guaranteed to take effect on the specific graph
+until:</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+The relevant configuration is removed: <code class="literal">ConfiguredGraphFactory.removeConfiguration("graph2");</code>
+</li><li class="listitem">
+The graph is recreated using the template configuration: <code class="literal">ConfiguredGraphFactory.create("graph2");</code>
+</li></ol></div>
+
+</td></tr></table></div>
+
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="update-examples"></a>9.8.4.&nbsp;Update Examples</h3></div></div></div>
+
+<p>1) We migrated our Cassandra data to a new server with a new
+IP address:</p>
+<pre class="programlisting"><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.backend"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"cql"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"127.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"graph.graphname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>ConfiguredGraphFactory.createConfiguration<span class="hl-gremlin-func">(</span>new<span class="hl-gremlin-func">
+</span>MapConfiguration<span class="hl-gremlin-func">(</span>map<span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span>g1<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.open<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><em class="hl-comment">// Update configuration</em><span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"10.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>ConfiguredGraphFactory.updateConfiguration<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span>,<span class="hl-gremlin-func">
+</span>map<span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><em class="hl-comment">// We are now guaranteed to use the updated configuration</em><span class="hl-gremlin-func">
+</span>g1<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.open<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;</pre>
+
+<p>2) We added an Elasticsearch node to our setup:</p>
+<pre class="programlisting"><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.backend"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"cql"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"127.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"graph.graphname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>ConfiguredGraphFactory.createConfiguration<span class="hl-gremlin-func">(</span>new<span class="hl-gremlin-func">
+</span>MapConfiguration<span class="hl-gremlin-func">(</span>map<span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span>g1<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.open<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><em class="hl-comment">// Update configuration</em><span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"index.search.backend"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"elasticsearch"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"index.search.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"127.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"index.search.elasticsearch.transport-scheme"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"http"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>ConfiguredGraphFactory.updateConfiguration<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span>,<span class="hl-gremlin-func">
+</span>map<span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><em class="hl-comment">// We are now guaranteed to use the updated configuration</em><span class="hl-gremlin-func">
+</span>g1<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.open<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;</pre>
+
+<p>3) Update a graph configuration that was created using a template configuration that has been updated:</p>
+<pre class="programlisting"><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.backend"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"cql"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"127.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>ConfiguredGraphFactory.createTemplateConfiguration<span class="hl-gremlin-func">(</span>new<span class="hl-gremlin-func">
+</span>MapConfiguration<span class="hl-gremlin-func">(</span>map<span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span>g1<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><em class="hl-comment">// Update template configuration</em><span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"index.search.backend"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"elasticsearch"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"index.search.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"127.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"index.search.elasticsearch.transport-scheme"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"http"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>ConfiguredGraphFactory.updateTemplateConfiguration<span class="hl-gremlin-func">(</span>new<span class="hl-gremlin-func">
+</span>MapConfiguration<span class="hl-gremlin-func">(</span>map<span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><em class="hl-comment">// Remove Configuration</em><span class="hl-gremlin-func">
+</span>ConfiguredGraphFactory.removeConfiguration<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><em class="hl-comment">// Recreate</em><span class="hl-gremlin-func">
+</span>ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><em class="hl-comment">// Now this graph's configuration is guaranteed to be updated</em></pre>
+
+</div>
+</div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="JanusGraphmanager"></a>9.9.&nbsp;JanusGraphManager</h2></div></div></div>
+
+<p>The <code class="literal">JanusGraphManager</code> is a <code class="literal">Singleton</code> adhering to the TinkerPop graphManager specifications.</p>
+<p>In particular, the <code class="literal">JanusGraphManager</code> provides:</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+a coordinated mechanism by which to instantiate graph references on a given JanusGraph node
+</li><li class="listitem">
+a graph reference tracker (or cache)
+</li></ol></div>
+
+<p>Any graph you create using the <code class="literal">graph.graphname</code> property will go through the <code class="literal">JanusGraphManager</code> and thus be instantiated in a coordinated fashion. The graph reference will also be placed in the graph cache on the JVM in question.</p>
+<p>Thus, any graph you open using the <code class="literal">graph.graphname</code> property that has already been instantiated on the JVM in question will be retrieved from the graph cache.</p>
+<p>This is why updates to your configurations require a few steps to guarantee correctness.</p>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="usingtheJanusGraphmanager"></a>9.9.1.&nbsp;How To Use The JanusGraphManager</h3></div></div></div>
+
+<p>This is a new configuration option you can use when defining a property in your configuration that defines how to access a graph. All configurations that include this property will result in the graph instantiation happening through the <code class="literal">JanusGraphManager</code> (process explained above).</p>
+<p>For backwards compatibility, any graphs that do not supply this parameter but supplied at server start in your graphs object in your .yaml file, these graphs will be bound through the JanusGraphManager denoted by their <code class="literal">key</code> supplied for that graph. For example, if your .yaml graphs object looks like:</p>
+<pre class="programlisting"><span class="hl-attribute">graphManager</span>: org.janusgraph.graphdb.management.JanusGraphManager
+graphs {
+<span class="hl-attribute">  graph1</span>: conf/graph1.properties,
+<span class="hl-attribute">  graph2</span>: conf/graph2.properties
+}</pre>
+
+<p>but <code class="literal">conf/graph1.properties</code> and <code class="literal">conf/graph2.properties</code> do not include the property <code class="literal">graph.graphname</code>, then these graphs will be stored in the JanusGraphManager and thus bound in your gremlin script executions as <code class="literal">graph1</code> and <code class="literal">graph2</code>, respectively.</p>
+</div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="important"></a>9.9.2.&nbsp;Important</h3></div></div></div>
+
+<p>For convenience, if your configuration used to open a graph specifies <code class="literal">graph.graphname</code>, but does not specify the backend&#8217;s storage directory, tablename, or keyspacename, then the relevant parameter will automatically be set to the value of <code class="literal">graph.graphname</code>. However, if you supply one of those parameters, that value will always take precedence. And if you supply neither, they default to the configuration option&#8217;s default value.</p>
+<p>One special case is <code class="literal">storage.root</code> configuration option. This is a new configuration option used to specify the base of the directory that will be used for any backend requiring local storage directory access. If you supply this parameter, you must also supply the <code class="literal">graph.graphname</code> property, and the absolute storage directory will be equal to the value of the <code class="literal">graph.graphname</code> property appended to the value of the <code class="literal">storage.root</code> property.</p>
+<p>Below are some example use cases:</p>
+<p>1) Create a template configuration for my Cassandra backend such that each graph created using this configuration gets a unique keyspace equivalent to the <code class="literal">String</code> &lt;graphName&gt; provided to the factory:</p>
+<pre class="programlisting"><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.backend"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"cql"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"127.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>ConfiguredGraphFactory.createTemplateConfiguration<span class="hl-gremlin-func">(</span>new<span class="hl-gremlin-func">
+</span>MapConfiguration<span class="hl-gremlin-func">(</span>map<span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span>g1<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func"> </span><em class="hl-comment">//keyspace === graph1</em><span class="hl-gremlin-func">
+</span>g2<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph2"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func"> </span><em class="hl-comment">//keyspace === graph2</em><span class="hl-gremlin-func">
+</span>g3<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph3"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func"> </span><em class="hl-comment">//keyspace === graph3</em></pre>
+
+<p>2) Create a template configuration for my BerkeleyJE backend such that each graph created using this configuration gets a unique storage directory equivalent to the "&lt;storage.root&gt;/&lt;graph.graphname&gt;":</p>
+<pre class="programlisting"><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.backend"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"berkeleyje"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.root"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"/data/graphs"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>ConfiguredGraphFactory.createTemplateConfiguration<span class="hl-gremlin-func">(</span>new<span class="hl-gremlin-func">
+</span>MapConfiguration<span class="hl-gremlin-func">(</span>map<span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span>g1<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func"> </span><em class="hl-comment">//storage directory === /data/graphs/graph1</em><span class="hl-gremlin-func">
+</span>g2<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph2"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func"> </span><em class="hl-comment">//storage directory === /data/graphs/graph2</em><span class="hl-gremlin-func">
+</span>g3<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph3"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func"> </span><em class="hl-comment">//storage directory === /data/graphs/graph3</em></pre>
+
+</div>
+</div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="graph-and-traversal-bindings"></a>9.10.&nbsp;Graph and Traversal Bindings</h2></div></div></div>
+
+<p>Graphs created using the ConfiguredGraphFactory are bound to the executor context on the Gremlin Server by the "graph.graphname" property, and the graph&#8217;s traversal reference is bound to the context by "&lt;graphname&gt;_traversal". This means, on subsequent connections to the server after the first time you create/open a graph, you can access the graph and traversal references by the "&lt;graphname&gt;" and "&lt;graphname&gt;_traversal" properties.</p>
+<p>Learn more about this feature and how to configure your server to use said feature <a class="link" href="things-to-consider-in-a-multi-node-janusgraph-cluster.html#dynamic-graph-and-traversal-bindings" title="10.1.2.&nbsp;Dynamic Graph and Traversal Bindings">here</a>.</p>
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/icons/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top">
+<p>If you are connected to a remote Gremlin Server using the Gremlin Console and a <span class="strong"><strong>sessioned</strong></span> connection, then you will have to reconnect to the server to bind the variables. This is also true for any sessioned WebSocket connection.</p>
+</td></tr></table></div>
+
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/icons/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top">
+<p>The JanusGraphManager rebinds every graph stored on the ConfigurationManagementGraph (or those for which you have created configurations) every 20 seconds. This means your graph and traversal bindings for graphs created using the ConfigredGraphFactory will be available on all JanusGraph nodes with a maximum of a 20 second lag. It also means that a binding will still be available on a node after a server restart.</p>
+</td></tr></table></div>
+
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="binding-example"></a>9.10.1.&nbsp;Binding Example</h3></div></div></div>
+
+<pre class="programlisting"><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>:remote<span class="hl-gremlin-func"> </span>connect<span class="hl-gremlin-func"> </span>tinkerpop.server<span class="hl-gremlin-func"> </span>conf/remote.yaml<span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span>Configured<span class="hl-gremlin-func"> </span>localhost/<span class="hl-number">127.0</span>.<span class="hl-number">0.1</span>:<span class="hl-number">8182</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>:remote<span class="hl-gremlin-func"> </span>console<span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span>All<span class="hl-gremlin-func"> </span>scripts<span class="hl-gremlin-func"> </span>will<span class="hl-gremlin-func"> </span>now<span class="hl-gremlin-func"> </span>be<span class="hl-gremlin-func"> </span>sent<span class="hl-gremlin-func"> </span>to<span class="hl-gremlin-func"> </span>Greml<span class="hl-gremlin-func">in </span>Server<span class="hl-gremlin-func"> </span>-<span class="hl-gremlin-func"> </span>[localhost/<span class="hl-number">127.0</span>.<span class="hl-number">0.1</span>:<span class="hl-number">8182</span>]<span class="hl-gremlin-func"> </span>-<span class="hl-gremlin-func"> </span>type<span class="hl-gremlin-func"> </span><span class="hl-string">':remote console'</span><span class="hl-gremlin-func"> </span>to<span class="hl-gremlin-func"> </span>return<span class="hl-gremlin-func"> </span>to<span class="hl-gremlin-func"> </span>local<span class="hl-gremlin-func"> </span>mode<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.open<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span>standardjanusgraph[cassandrathrift:[<span class="hl-number">127.0</span>.<span class="hl-number">0.1</span>]]<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>graph1<span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span>standardjanusgraph[cassandrathrift:[<span class="hl-number">127.0</span>.<span class="hl-number">0.1</span>]]<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>graph1_traversal<span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span>graphtraversalsource[standardjanusgraph[cassandrathrift:[<span class="hl-number">127.0</span>.<span class="hl-number">0.1</span>]],<span class="hl-gremlin-func"> </span>standard]</pre>
+
+</div>
+</div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="examples"></a>9.11.&nbsp;Examples</h2></div></div></div>
+
+<p>It is reccomended to use a sessioned connection when creating a Configured Graph Factory template. If a sessioned connection is not used the Configured Graph Factory Template creation must be sent to the server as a single line using semi-colons. See details on sessions can be found in <a class="xref" href="server.html#first-example-connecting-gremlin-server" title="7.1.1.1.&nbsp;Connecting to Gremlin Server">Section&nbsp;7.1.1.1, &#8220;Connecting to Gremlin Server&#8221;</a>.</p>
+<pre class="programlisting"><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>:remote<span class="hl-gremlin-func"> </span>connect<span class="hl-gremlin-func"> </span>tinkerpop.server<span class="hl-gremlin-func"> </span>conf/remote.yaml<span class="hl-gremlin-func"> </span>session<span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span>Configured<span class="hl-gremlin-func"> </span>localhost/<span class="hl-number">127.0</span>.<span class="hl-number">0.1</span>:<span class="hl-number">8182</span><span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>:remote<span class="hl-gremlin-func"> </span>console<span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span>All<span class="hl-gremlin-func"> </span>scripts<span class="hl-gremlin-func"> </span>will<span class="hl-gremlin-func"> </span>now<span class="hl-gremlin-func"> </span>be<span class="hl-gremlin-func"> </span>sent<span class="hl-gremlin-func"> </span>to<span class="hl-gremlin-func"> </span>Greml<span class="hl-gremlin-func">in </span>Server<span class="hl-gremlin-func"> </span>-<span class="hl-gremlin-func"> </span>[localhost:<span class="hl-number">8182</span>]-[<span class="hl-number">5206</span>cdde-b231-<span class="hl-number">41f</span>a-<span class="hl-number">9e6</span>c-<span class="hl-number">69f</span>eac0fe2b2]<span class="hl-gremlin-func"> </span>-<span class="hl-gremlin-func"> </span>type<span class="hl-gremlin-func"> </span><span class="hl-string">':remote console'</span><span class="hl-gremlin-func"> </span>to<span class="hl-gremlin-func"> </span>return<span class="hl-gremlin-func"> </span>to<span class="hl-gremlin-func"> </span>local<span class="hl-gremlin-func"> </span>mode<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.open<span class="hl-gremlin-func">(</span><span class="hl-string">"graph"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>Please<span class="hl-gremlin-func"> </span>create<span class="hl-gremlin-func"> </span>configuration<span class="hl-gremlin-func"> </span>f<span class="hl-gremlin-func">or </span>this<span class="hl-gremlin-func"> </span>graph<span class="hl-gremlin-func"> </span>using<span class="hl-gremlin-func"> </span>the<span class="hl-gremlin-func">
+</span>ConfigurationManagementGraph<span class="hl-gremlin-func"> </span>API.<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>Please<span class="hl-gremlin-func"> </span>create<span class="hl-gremlin-func"> </span>a<span class="hl-gremlin-func"> </span>template<span class="hl-gremlin-func"> </span>Configuration<span class="hl-gremlin-func"> </span>using<span class="hl-gremlin-func"> </span>the<span class="hl-gremlin-func">
+</span>ConfigurationManagementGraph<span class="hl-gremlin-func"> </span>API.<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.backend"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"cql"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"127.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"GraphName"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.createConfiguration<span class="hl-gremlin-func">(</span>new<span class="hl-gremlin-func"> </span>MapConfiguration<span class="hl-gremlin-func">(</span>map<span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>Please<span class="hl-gremlin-func"> </span>include<span class="hl-gremlin-func"> </span><span class="hl-gremlin-func">in </span>your<span class="hl-gremlin-func"> </span>configuration<span class="hl-gremlin-func"> </span>the<span class="hl-gremlin-func"> </span>property<span class="hl-gremlin-func"> </span><span class="hl-string">"graph.graphname"</span>.<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.backend"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"cql"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"127.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"graph.graphname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.createConfiguration<span class="hl-gremlin-func">(</span>new<span class="hl-gremlin-func"> </span>MapConfiguration<span class="hl-gremlin-func">(</span>map<span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span>null<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.open<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>.vertices<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func"> </span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.backend"</span>,<span class="hl-gremlin-func">
+</span><span class="hl-string">"cql"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func"> </span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"127.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"graph.graphname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.createTemplateConfiguration<span class="hl-gremlin-func">(</span>new<span class="hl-gremlin-func"> </span>MapConfiguration<span class="hl-gremlin-func">(</span>map<span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>Your<span class="hl-gremlin-func"> </span>template<span class="hl-gremlin-func"> </span>configuration<span class="hl-gremlin-func"> </span>may<span class="hl-gremlin-func"> </span>not<span class="hl-gremlin-func"> </span>conta<span class="hl-gremlin-func">in </span>the<span class="hl-gremlin-func"> </span>property<span class="hl-gremlin-func">
+</span><span class="hl-string">"graph.graphname"</span>.<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span><span class="hl-gremlin-func">map </span>=<span class="hl-gremlin-func"> </span>new<span class="hl-gremlin-func"> </span>HashMap<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.backend"</span>,<span class="hl-gremlin-func">
+</span><span class="hl-string">"cql"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func"> </span>map.put<span class="hl-gremlin-func">(</span><span class="hl-string">"storage.hostname"</span>,<span class="hl-gremlin-func"> </span><span class="hl-string">"127.0.0.1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.createTemplateConfiguration<span class="hl-gremlin-func">(</span>new<span class="hl-gremlin-func"> </span>MapConfiguration<span class="hl-gremlin-func">(</span>map<span class="hl-gremlin-func">)</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span>null<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><em class="hl-comment">// Each graph is now acting in unique keyspaces equivalent to the</em><span class="hl-gremlin-func">
+</span>graphnames.<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>g1<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.open<span class="hl-gremlin-func">(</span><span class="hl-string">"graph1"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>g2<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph2"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>g3<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph3"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>g2.<span class="hl-gremlin-func">addVertex(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>l<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>[];<span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>l<span class="hl-gremlin-func"> </span>&lt;&lt;<span class="hl-gremlin-func"> </span>g1.vertices<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>.size<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span><span class="hl-number">0</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>l<span class="hl-gremlin-func"> </span>&lt;&lt;<span class="hl-gremlin-func"> </span>g2.vertices<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>.size<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span><span class="hl-number">1</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>l<span class="hl-gremlin-func"> </span>&lt;&lt;<span class="hl-gremlin-func"> </span>g3.vertices<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>.size<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span><span class="hl-number">0</span><span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><em class="hl-comment">// After a graph is created, you must access it using .open()</em><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>g2<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.create<span class="hl-gremlin-func">(</span><span class="hl-string">"graph2"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func"> </span>g2.vertices<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>.size<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span>Configuration<span class="hl-gremlin-func"> </span>f<span class="hl-gremlin-func">or </span>graph<span class="hl-gremlin-func"> </span><span class="hl-string">"graph2"</span><span class="hl-gremlin-func"> </span>already<span class="hl-gremlin-func"> </span>exists.<span class="hl-gremlin-func">
+</span><span class="hl-gremlin-func">
+</span><span class="hl-repl-prompt">gremlin&gt;</span><span class="hl-gremlin-func"> </span>g2<span class="hl-gremlin-func"> </span>=<span class="hl-gremlin-func"> </span>ConfiguredGraphFactory.open<span class="hl-gremlin-func">(</span><span class="hl-string">"graph2"</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func"> </span>g2.vertices<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>.size<span class="hl-gremlin-func">(</span><span class="hl-gremlin-func">)</span>;<span class="hl-gremlin-func">
+</span><span class="hl-repl-result">==&gt;</span><span class="hl-number">1</span></pre>
+
+</div>
+</div></div><div class="clearer"></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="deployment-scenarios.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="basics.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="things-to-consider-in-a-multi-node-janusgraph-cluster.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;8.&nbsp;Deployment Scenarios&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;10.&nbsp;Things to Consider in a Multi-Node JanusGraph Cluster</td></tr></table></div><div class="footer-wrapper"><footer id="footer"><div class="copyright">
+              Copyright &copy; 2017 JanusGraph Authors. All rights reserved.<br>
+              The Linux Foundation has registered trademarks and uses trademarks. For a list of<br>
+              trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page.<br>
+              Cassandra, Groovy, HBase, Hadoop, Lucene, Solr, and TinkerPop are trademarks of the Apache Software Foundation.<br>
+              Berkeley DB and Berkeley DB Java Edition are trademarks of Oracle.<br>
+              Documentation generated with <a href="https://www.methods.co.nz/asciidoc/">AsciiDoc</a>, <a href="https://asciidoctor.org/">AsciiDoctor</a>, <a href="http://docbook.sourceforge.net/">DocBook</a>, and <a href="http://saxon.sourceforge.net/">Saxon</a>.
+        	  </div></footer></div></div></body></html>
