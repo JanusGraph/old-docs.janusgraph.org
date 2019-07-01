@@ -1,0 +1,75 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;19.&nbsp;Connecting from Python</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="JanusGraph Documentation"><link rel="up" href="connecting.html" title="Part&nbsp;III.&nbsp;Connecting to JanusGraph"><link rel="prev" href="connecting-via-java.html" title="Chapter&nbsp;18.&nbsp;Connecting from Java"><link rel="next" href="connecting-via-dotnet.html" title="Chapter&nbsp;20.&nbsp;Connecting from .NET"><script xmlns:d="https://docbook.org/ns/docbook" type="text/javascript" src="js/jquery/jquery-1.11.0.js"></script><script xmlns:d="https://docbook.org/ns/docbook" type="text/javascript" src="js/jquery/jquery-migrate-1.2.1.min.js"></script><link xmlns:d="https://docbook.org/ns/docbook" rel="stylesheet" id="inline-blob-janusgraph-docs-specific" href="css/docs.css" type="text/css" media="all"><link xmlns:d="https://docbook.org/ns/docbook" rel="apple-touch-icon" type="image/png" href="images/janusgraph-logomark.png"><script xmlns:d="https://docbook.org/ns/docbook" type="text/javascript">
+      WebFontConfig = {
+        google: {
+          families: [
+            "Lato:400,400italic,700,700italic:latin,greek-ext,cyrillic,latin-ext,greek,cyrillic-ext,vietnamese",
+            "Open+Sans:400,400italic,700,700italic:latin,greek-ext,cyrillic,latin-ext,greek,cyrillic-ext,vietnamese",
+            "Antic+Slab:400,400italic,700,700italic:latin,greek-ext,cyrillic,latin-ext,greek,cyrillic-ext,vietnamese"
+          ]
+        }
+      };
+      (function() {
+      var wf = document.createElement('script');
+      wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+        '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+	wf.type = 'text/javascript';
+	wf.async = 'true';
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(wf, s);
+	})();
+    </script></head><body xmlns:d="https://docbook.org/ns/docbook" bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="wrapper"><div class="header-wrapper"><header id="header"><ul class="header-list"><li class="header-item"><a href="https://janusgraph.org"><img src="images/janusgraph-logo.png" alt="JanusGraph" class="normal_logo"></a></li><li class="header-item-right"><a href="https://github.com/JanusGraph/janusgraph/releases">Download JanusGraph</a></li><li class="header-item-right dropdown"><a href="https://docs.janusgraph.org/latest/doc-versions.html">Other Doc Versions</a><div class="dropdown-content"><a href="https://docs.janusgraph.org/latest/index.html">Latest</a><a href="https://docs.janusgraph.org/0.4.0/index.html">Version 0.4.0</a><a href="https://docs.janusgraph.org/0.3.2/index.html">Version 0.3.2</a><a href="https://docs.janusgraph.org/0.3.1/index.html">Version 0.3.1</a><a href="https://docs.janusgraph.org/0.3.0/index.html">Version 0.3.0</a><a href="https://docs.janusgraph.org/0.2.3/index.html">Version 0.2.3</a><a href="https://docs.janusgraph.org/0.2.2/index.html">Version 0.2.2</a><a href="https://docs.janusgraph.org/0.2.1/index.html">Version 0.2.1</a><a href="https://docs.janusgraph.org/0.2.0/index.html">Version 0.2.0</a><a href="https://docs.janusgraph.org/0.1.1/index.html">Version 0.1.1</a><a href="https://docs.janusgraph.org/0.1.0/index.html">Version 0.1.0</a></div></li><li class="header-item-right"><a href="index.html">Documentation (0.4.0)</a></li></ul></header></div><div id="main" class="clearfix width-100"><div class="breadcrumbs"><span class="breadcrumb-link"><a href="index.html">JanusGraph Documentation</a></span> &gt; <span class="breadcrumb-link"><a href="connecting.html">Connecting to JanusGraph</a></span> &gt; <span class="breadcrumb-node">Connecting from Python</span></div><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="connecting-via-python"></a>Chapter&nbsp;19.&nbsp;Connecting from Python</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="section"><a href="connecting-via-python.html#_getting_started_with_janusgraph_and_gremlin_python">19.1. Getting Started with JanusGraph and Gremlin-Python</a></span></dt><dt><span class="section"><a href="connecting-via-python.html#_janusgraph_specific_types_and_predicates_2">19.2. JanusGraph Specific Types and Predicates</a></span></dt></dl></div>
+
+<p>JanusGraph can be queried from a Python application with Apache TinkerPop&#8217;s <a class="link" href="https://tinkerpop.apache.org/docs/3.4.1/reference/#gremlin-python" target="_top">Gremlin-Python</a>.</p>
+<p>Gremlin traversals can be constructed with Gremlin-Python just like in Gremlin-Java or Gremiln-Groovy.
+Refer to <a class="xref" href="gremlin.html" title="Chapter&nbsp;6.&nbsp;Gremlin Query Language">Chapter&nbsp;6, <i>Gremlin Query Language</i></a> for an introduction to Gremlin and pointers to further resources.</p>
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/icons/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top">
+<p>Some Gremlin step and predicate names are reserved words in Python.
+Those names are simply postfixed with <code class="literal">_</code> in Gremlin-Python, e.g., <code class="literal">in()</code> becomes <code class="literal">in_()</code>, <code class="literal">not()</code> becomes <code class="literal">not_()</code>, and so on. The other names affected by this are: <code class="literal">all</code>, <code class="literal">and</code>, <code class="literal">as</code>, <code class="literal">from</code>, <code class="literal">global</code>, <code class="literal">is</code>, <code class="literal">list</code>, <code class="literal">or</code>, and <code class="literal">set</code>.</p>
+</td></tr></table></div>
+
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_getting_started_with_janusgraph_and_gremlin_python"></a>19.1.&nbsp;Getting Started with JanusGraph and Gremlin-Python</h2></div></div></div>
+
+<p>To get started with Gremlin-Python:</p>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<p class="simpara">Install Gremlin-Python:</p>
+<pre class="programlisting">pip install gremlinpython==3.4.1</pre>
+
+</li><li class="listitem">
+<p class="simpara">Create a text file <code class="literal">gremlinexample.py</code> and add the following imports to it:</p>
+<pre class="programlisting">from gremlin_python import statics
+from gremlin_python.structure.graph import Graph
+from gremlin_python.process.graph_traversal import __
+from gremlin_python.driver.driver_remote_connection import DriverRemoteConnection</pre>
+
+</li><li class="listitem">
+<p class="simpara">Create a <code class="literal">GraphTraversalSource</code> which is the basis for all Gremlin traversals:</p>
+<pre class="programlisting">graph = Graph()
+connection = DriverRemoteConnection('ws://localhost:8182/gremlin', 'g')
+// The connection should be closed on shut down to close open connections with connection.close()
+g = graph.traversal().withRemote(connection)
+// Reuse 'g' across the application</pre>
+
+</li><li class="listitem">
+<p class="simpara">Execute a simple traversal:</p>
+<pre class="programlisting">herculesAge = g.V().has('name', 'hercules').values('age').next()
+print('Hercules is {} years old.'.format(herculesAge))</pre>
+
+<p class="simpara"><code class="literal">next()</code> is a terminal step that submits the traversal to the Gremlin Server and returns a single result.
+Other terminal steps can be found <a class="link" href="https://tinkerpop.apache.org/docs/3.4.1/reference/#_remoteconnection_submission" target="_top">in TinkerPop&#8217;s reference documentation</a>.</p>
+</li></ol></div>
+
+</div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_janusgraph_specific_types_and_predicates_2"></a>19.2.&nbsp;JanusGraph Specific Types and Predicates</h2></div></div></div>
+
+<p>JanusGraph contains some types and <a class="link" href="search-predicates.html" title="Chapter&nbsp;26.&nbsp;Search Predicates and Data Types">predicates</a> that are not part of Apache TinkerPop and are therefore also not supported by Gremlin-Python.</p>
+</div>
+</div></div><div class="clearer"></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="connecting-via-java.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="connecting.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="connecting-via-dotnet.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;18.&nbsp;Connecting from Java&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;20.&nbsp;Connecting from .NET</td></tr></table></div><div class="footer-wrapper"><footer id="footer"><div class="copyright">
+              Copyright &copy; 2017 JanusGraph Authors. All rights reserved.<br>
+              The Linux Foundation has registered trademarks and uses trademarks. For a list of<br>
+              trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page.<br>
+              Cassandra, Groovy, HBase, Hadoop, Lucene, Solr, and TinkerPop are trademarks of the Apache Software Foundation.<br>
+              Berkeley DB and Berkeley DB Java Edition are trademarks of Oracle.<br>
+              Documentation generated with <a href="https://www.methods.co.nz/asciidoc/">AsciiDoc</a>, <a href="https://asciidoctor.org/">AsciiDoctor</a>, <a href="http://docbook.sourceforge.net/">DocBook</a>, and <a href="http://saxon.sourceforge.net/">Saxon</a>.
+        	  </div></footer></div></div></body></html>
